@@ -1,0 +1,15 @@
+{
+    "name": "dmmmsu/filipino-cookbook-api",
+    "description": "Secured Filipino Cookbook API built with Slim Framework, PDO, and token-based authentication.",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "slim/slim": "^4.12",
+        "slim/psr7": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}
