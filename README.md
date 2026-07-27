@@ -78,7 +78,6 @@ composer install
 
    ```bash
    php -S localhost:8000 -t public
-   ![run API](images/start.png)
    ```
 
 4. Test it — `GET http://localhost:8000/` should return a welcome message with
