@@ -206,8 +206,8 @@ GET /api/foods/random
 5. Temporarily rename the `foods` table (or empty it) and confirm the
    endpoint returns `404 Not Found` with a clear message, then restore it.
 
-*(![Random Foods](images/3.png))*
-*(![Error](images/5.png))*
+*![Random Foods](images/3.png)*
+*![Error](images/5.png)*
 
 ### 2. Security Feature — Per-IP Rate Limiting
 
@@ -239,7 +239,7 @@ for a single-server student project.
    ```
 3. Wait 60 seconds and try again — requests should succeed again.
 
-*(![Welcome](images/4.png))*
+*![Welcome](images/4.png)*
 
 ---
 
