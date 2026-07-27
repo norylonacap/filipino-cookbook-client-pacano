@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'dmmmsu/filipino-cookbook-api',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'fc97cc1b84f840e920bd9cc33cc02bc77f05fb48',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'dmmmsu/filipino-cookbook-api' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'fc97cc1b84f840e920bd9cc33cc02bc77f05fb48',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
