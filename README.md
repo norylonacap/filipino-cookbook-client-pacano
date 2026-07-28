@@ -53,7 +53,7 @@ running instance of the API.
    start Apache/MySQL via XAMPP).
 3. Open `index.html` in a browser (or serve the folder with any static
    server, e.g. `php -S localhost:8000`).
-4. In the app, click **⚙ Connection** and confirm/edit:
+4. In the app, click **Connection** and confirm/edit:
    - **API base URL** — defaults to `http://localhost/filipino-cookbook-api-rillera/public/api`
    - **Bearer token** — defaults to `dmmmsu-cookbook-token-2026`
 5. Click **Reconnect**. The menu board loads automatically on page open as well.
@@ -102,7 +102,7 @@ On success (`201`), the board refreshes automatically. On failure (e.g. missing
 required field, giving a `400`), the exact error message returned by the API is
 shown inline in the form.
 
-**Delete a dish** — open any dish's detail drawer and click **🗑 Delete this
+**Delete a dish** — open any dish's detail drawer and click ** Delete this
 dish**. This asks for confirmation, then calls `DELETE /api/foods/{id}`. On
 success (`200`) the drawer closes and the board refreshes; on failure (e.g.
 `404` if it was already deleted elsewhere) the error is shown inline.
