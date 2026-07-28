@@ -1,252 +1,149 @@
-# Filipino Cookbook API
+# Karinderya — Filipino Cookbook Client
 
-A secured REST API for browsing Filipino dishes, their categories, origins, and
-ingredients — built with the Slim Framework, PDO (MySQL), and token-based
-authentication.
+A compact, single-page web client that consumes the **Filipino Cookbook API**
+and displays dishes, categories, origins, and ingredients through a browsable
+menu-board interface — including adding and deleting dishes directly against
+the live API.
 
-## Description
+---
 
-- **Purpose:** Serve structured data about Filipino foods (categories, regional
-  origins, ingredients, and preparation instructions) over a clean JSON REST API.
-- **Type of information provided:** Foods, categories, origins, ingredients, and
-  the many-to-many relationship between foods and their ingredients.
-- **Intended users:** Fellow students building client/driver applications, and
-  anyone wanting a browsable Filipino recipe dataset.
-- **Main functions:** List foods, look up a single food, search foods by name,
-  get a random food, list categories, list ingredients, and add a new food.
-- **Technologies used:** PHP 8, Slim Framework 4, PDO/MySQL, Composer, JSON.
+## Contents
 
-## Features
+1. [Application Description](#application-description)
+2. [Technologies Used](#technologies-used)
+3. [Installation Instructions](#installation-instructions)
+4. [API Endpoints Used](#api-endpoints-used)
+5. [Feature: Add & Delete Dishes](#feature-add--delete-dishes)
+6. [Screenshots](#screenshots)
+7. [Known Issues](#known-issues)
+8. [API Source and Acknowledgment](#api-source-and-acknowledgment)
 
-- Retrieve all Filipino foods, with category, origin, and ingredients attached
-- Retrieve a single food by ID
-- Search foods by name
-- Get a randomly selected Filipino food
-- Retrieve all food categories
-- Retrieve all ingredients
-- Add a new food (with ingredient list) via POST
-- Token-based authentication on all `/api/*` routes
-- Per-IP rate limiting on all `/api/*` routes
-- JSON responses with consistent status codes throughout
+---
+
+## Application Description
+
+Karinderya is a lightweight front end for exploring Filipino dishes served by
+a classmate's Filipino Cookbook API. It lets a user browse all dishes, filter
+by category and origin, search by name, and open a dish to view its full
+ingredient list — all through the API's JSON endpoints, with no direct
+database access.
+
+**API used:** [filipino-cookbook-api-rillera](https://github.com/exilleon/filipino-cookbook-api-rillera)
+**Intended users:** students and reviewers testing the API's read endpoints
+**Major features:** category/origin filtering, live search, dish detail view,
+in-app API connection settings (base URL + token) so it can point at any
+running instance of the API.
 
 ## Technologies Used
 
-- PHP (>= 8.0)
-- Slim Framework 4
-- MySQL / PDO
-- Composer
-- JSON
-- Apache / XAMPP (or PHP's built-in server)
-- Thunder Client / Postman for testing
-- Git & GitHub
+- HTML5, CSS3, vanilla JavaScript (Fetch API)
+- Google Fonts (Fraunces, IBM Plex Mono, Inter)
+- No build step, no framework — runs as static files
 
 ## Installation Instructions
 
-```bash
-git clone https://github.com/norylonacap/filipino-cookbook-api-pacano.git
-cd filipino-cookbook-api-pacano
-composer install
-
-```
-
-1. Copy the example config and fill in your local values:
-
-   ```bash
-   cp config.example.php config.php
+1. Clone this repository:
    ```
-
-   Edit `config.php`:
-
-   ```php
-   return [
-       'db_host'    => '127.0.0.1',
-       'db_name'    => 'filipino_cookbook_api',
-       'db_user'    => 'localhost',
-       'db_pass'    => 'none',
-       'db_charset' => 'utf8mb4',
-       'api_token'  => 'Bearer dmmmsu-cookbook-token-2026',
-   ];
+   git clone https://github.com/YOUR_USERNAME/filipino-cookbook-client-surname.git
+   cd filipino-cookbook-client-surname
    ```
+2. Make sure the Filipino Cookbook API is running locally (see the
+   [API repo](https://github.com/exilleon/filipino-cookbook-api-rillera) for
+   its own installation steps: `composer install`, import the SQL file,
+   start Apache/MySQL via XAMPP).
+3. Open `index.html` in a browser (or serve the folder with any static
+   server, e.g. `php -S localhost:8000`).
+4. In the app, click **⚙ Connection** and confirm/edit:
+   - **API base URL** — defaults to `http://localhost/filipino-cookbook-api-rillera/public/api`
+   - **Bearer token** — defaults to `dmmmsu-cookbook-token-2026`
+5. Click **Reconnect**. The menu board loads automatically on page open as well.
 
-2. Start MySQL (e.g. via XAMPP) and import the database:
+> Note: this API sends `Access-Control-Allow-Origin: *` on every response
+> (verified in source), so no CORS setup is needed even if the client is
+> served from a different port or origin than the API.
 
-   ```bash
-   mysql -u root -p < filipino_foods_relational.sql
-   ```
+## API Endpoints Used
 
-3. Run the API:
+| Endpoint | Method | Used for |
+|---|---|---|
+| `/api/foods` | GET | Initial dish grid |
+| `/api/categories` | GET | Category filter chips + Add Dish form dropdown |
+| `/api/origins` | GET | Origin filter chips + Add Dish form dropdown |
+| `/api/ingredients` | GET | Matching typed ingredient names to IDs for Add Dish |
+| `/api/foods/search/{name}` | GET | Live search |
+| `/api/foods/{id}` | GET | Dish detail drawer (ingredients) |
+| `/api/foods` | POST | Add Dish form |
+| `/api/foods/{id}` | DELETE | Delete button in the detail drawer |
 
-   ```bash
-   php -S localhost:8000 -t public
-   ```
+All requests include `Authorization: Bearer <token>` and `Accept: application/json`.
 
-4. Test it — `GET http://localhost:8000/` should return a welcome message with
-   no authentication required.
+**Response shape (verified against source, not just the API's README):** successful
+responses return the raw array or object directly — there is no `{status, data}`
+wrapper on success, only on errors (`{status: "error", message: "..."}`). Field
+names on a food object are `food_id`, `food_name`, `category_name`, `origin_name`,
+`instructions`, and `ingredients` (an array of ingredient name strings).
 
-## Database Setup
+## Feature: Add & Delete Dishes
 
-- **Database name:** `filipino_cookbook_api`
-- **SQL file:** `filipino_foods_relational.sql`
-- **Tables:** `categories`, `origins`, `foods`, `ingredients`, `food_ingredients`
-- **Relationships:**
+Two write operations were added on top of the original read-only browser:
 
-  ```
-  categories -> foods <- origins
-  foods -> food_ingredients <- ingredients
-  
-  ```
-
-  Each food belongs to one category and one origin. `food_ingredients` is a
-  junction table implementing the many-to-many relationship between foods and
-  ingredients.
-
-## Base URL
-
-```
-http://localhost:8000/api
-```
-
-## Authentication
-
-All `/api/*` routes require a Bearer token:
-
-```
-Authorization: Bearer dmmmsu-cookbook-token-2026
-```
-
-Missing or incorrect token → `401 Unauthorized`:
-
+**Add a dish** — click **+ Add dish** in the header. The form posts to
+`POST /api/foods` with:
 ```json
 {
-  "status": "error",
-  "message": "Unauthorized access. Valid API token is required."
+  "food_name": "string, required",
+  "category_id": "int, required — selected from a live dropdown of /api/categories",
+  "origin_id": "int, required — selected from a live dropdown of /api/origins",
+  "instructions": "string, required",
+  "ingredient_ids": "array of int, optional — matched from comma-separated ingredient names against /api/ingredients"
 }
-
 ```
+On success (`201`), the board refreshes automatically. On failure (e.g. missing
+required field, giving a `400`), the exact error message returned by the API is
+shown inline in the form.
 
-## Endpoints
+**Delete a dish** — open any dish's detail drawer and click **🗑 Delete this
+dish**. This asks for confirmation, then calls `DELETE /api/foods/{id}`. On
+success (`200`) the drawer closes and the board refreshes; on failure (e.g.
+`404` if it was already deleted elsewhere) the error is shown inline.
 
-| Method | Endpoint | Token? | Purpose |
-|---|---|---|---|
-| GET | `/` | No | Welcome message |
-| GET | `/api/status` | No | Health check |
-| GET | `/api/foods` | Yes | All foods + category, origin, ingredients |
-| GET | `/api/foods/random` | Yes | One randomly selected food |
-| GET | `/api/foods/{id}` | Yes | One food by ID (404 if missing) |
-| GET | `/api/foods/search/{name}` | Yes | Search foods by name |
-| GET | `/api/categories` | Yes | All categories |
-| GET | `/api/ingredients` | Yes | All ingredients |
-| POST | `/api/foods` | Yes | Add a new food (201 Created) |
+Both actions require the bearer token set in the Connection panel, since the
+API rejects unauthenticated writes the same way it does reads.
 
-See `API_DOCUMENTATION.md` for full request/response examples for every
-endpoint.
+## Screenshots
 
-## HTTP Status Codes
+- Main menu board with dishes loaded
+![Main menu](images/1.png)
+- Category/origin filter in use
+![Filter](images/2.png)
+- Search results
+![Search](images/3.png)
+- Dish detail drawer with ingredients
+![Detail drawer](images/4.png)
+- **Add Dish** form filled out and submitted successfully
+![Add Dish](images/5.png)
+- A dish being deleted (confirmation + refreshed board)
+![Delete](images/6.png)
+- Connection error state (e.g. wrong token)
+![Error](images/7.png)
 
-| Status Code | Meaning |
-|---|---|
-| 200 | Request completed successfully |
-| 201 | Resource created successfully |
-| 400 | Invalid request or missing parameter |
-| 401 | Missing or invalid authentication |
-| 404 | Requested resource was not found |
-| 429 | Too many requests |
-| 500 | Internal server error |
+## Known Issues
 
-## Project Structure
+- The current version of the upstream API (`filipino-cookbook-api-rillera`)
+  registers a duplicate catch-all `OPTIONS` route in `public/index.php`
+  (once near the CORS setup, once again near the bottom of the file), which
+  causes a `FastRoute\BadRouteException` and crashes the entire app before
+  it can respond to anything. This is not a bug in this client — it was
+  reported to the API's developer. A local workaround (removing the second
+  duplicate route registration) was used to test this client while waiting
+  on the fix.
 
-```
-filipino-cookbook-api-pacano/
-├── composer.json
-├── composer.lock
-├── config.example.php      (template — commit this)
-├── config.php               (real local values — gitignored)
-├── images                    (images for the README.md)
-├── .gitignore
-├── filipino_foods_relational.sql
-├── public/
-│   └── index.php
-├── storage/
-│   └── rate_limit/          (rate limiter runtime data — gitignored contents)
-├── test-db.php
-├── test-api.php
-├── README.md
-├── API_DOCUMENTATION.md
-└── vendor/                   (created by `composer install`, gitignored)
-```
+## API Source and Acknowledgment
 
----
+This client application uses the **Filipino Cookbook API** developed by:
 
-## Optional API Enhancements
+**Developer:** Stradlin Rillera
+**GitHub Repository:** https://github.com/exilleon/filipino-cookbook-api-rillera
 
-This project includes one added endpoint and one added security feature,
-beyond the base Filipino Cookbook API from the previous activity.
-
-### 1. New Endpoint — `GET /api/foods/random`
-
-**Description:** Returns one randomly selected Filipino food, with its
-category, origin, and full ingredient list attached — same shape as the other
-food endpoints.
-
-**Purpose:** Gives client apps an easy "surprise me" / discovery feature
-without having to fetch the whole food list and pick one client-side.
-
-**Files modified:** `public/index.php`
-
-**Endpoint added:**
-```
-GET /api/foods/random
-```
-
-**Testing instructions:**
-1. In Thunder Client/Postman, create `GET http://localhost:8000/api/foods/random`.
-2. Add header `Authorization: Bearer YOUR_SECRET_API_TOKEN`.
-3. Send the request — expect `200 OK` with a single food object.
-4. Send it several times — the returned food should vary.
-5. Temporarily rename the `foods` table (or empty it) and confirm the
-   endpoint returns `404 Not Found` with a clear message, then restore it.
-
-*![Random Foods](images/3.png)*
-*![Error](images/5.png)*
-
-### 2. Security Feature — Per-IP Rate Limiting
-
-**Description:** All `/api/*` routes are now protected by a sliding-window
-rate limiter: each client IP is limited to 30 requests per 60 seconds. Requests
-over the limit receive `429 Too Many Requests` instead of being processed.
-
-**Purpose:** Reduces the risk of brute-force token guessing and protects the
-database from being overwhelmed by a runaway client or script.
-
-**Files modified:** `public/index.php` (added `isRateLimited()` and
-`$rateLimitMiddleware`, attached to the `/api` route group)
-
-**Implementation notes:** The limiter stores a short list of recent request
-timestamps per IP in `storage/rate_limit/`, using file locking (`flock`) so
-concurrent requests don't corrupt the count. This keeps state across requests
-without needing a database table or an external cache service — appropriate
-for a single-server student project.
-
-**Testing instructions:**
-1. Send 30 requests to `GET /api/status`-protected route (e.g. `/api/categories`)
-   within a minute, with a valid token — all should return `200 OK`.
-2. Send a 31st request within the same minute — expect `429 Too Many Requests`:
-   ```json
-   {
-     "status": "error",
-     "message": "Too many requests. Please wait a moment and try again."
-   }
-   ```
-3. Wait 60 seconds and try again — requests should succeed again.
-
-*![Welcome](images/4.png)*
-
----
-
-## Developer Information
-
-- **Name: PACANO, Lyron Dave M.**
-- **Course & Section: Information Technology 4A**
-- **GitHub Username: noryonacap**
-- **Repository Link: https://github.com/norylonacap/filipino-cookbook-client-pacano**
-- **Date Completed: July 27, 2026**
+The API is used for educational purposes with the permission of the developer,
+as part of a collaborative API development and integration activity.

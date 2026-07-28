@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Karinderya · Filipino Cookbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="board">
+
+    <!-- Header -->
+    <header class="board__header">
+      <div class="brand">
+        <span class="brand__mark">🍚</span>
+        <div class="brand__text">
+          <h1>Karinderya</h1>
+          <p>a Filipino cookbook, on the wall</p>
+        </div>
+      </div>
+
+      <div class="header__controls">
+        <div class="search">
+          <input id="searchInput" type="text" placeholder="Search a dish — try “adobo”" autocomplete="off" />
+          <button id="searchBtn" aria-label="Search">→</button>
+        </div>
+        <button id="addDishBtn" class="pill-btn pill-btn--accent">+ Add dish</button>
+        <button id="settingsToggle" class="pill-btn" aria-expanded="false">⚙ Connection</button>
+      </div>
+    </header>
+
+    <!-- Connection settings (collapsible) -->
+    <section id="settingsPanel" class="settings" hidden>
+      <div class="settings__row">
+        <label for="apiBase">API base URL</label>
+        <input id="apiBase" type="text" value="http://localhost/filipino-cookbook-api-rillera/public/api" />
+      </div>
+      <div class="settings__row">
+        <label for="apiToken">Bearer token</label>
+        <input id="apiToken" type="text" value="dmmmsu-cookbook-token-2026" />
+      </div>
+      <button id="reconnectBtn" class="pill-btn pill-btn--accent">Reconnect</button>
+      <span id="connStatus" class="conn-status">not connected</span>
+    </section>
+
+    <!-- Category chips -->
+    <nav id="chipRow" class="chips" aria-label="Filter by category">
+      <button class="chip chip--active" data-category="all">All dishes</button>
+      <!-- populated dynamically -->
+    </nav>
+
+    <!-- Origin sub-filter -->
+    <div id="originRow" class="chips chips--origin" aria-label="Filter by origin"></div>
+
+    <!-- Status line -->
+    <p id="statusLine" class="status-line">Loading the menu board…</p>
+
+    <!-- Card grid -->
+    <main id="grid" class="grid" aria-live="polite"></main>
+
+    <!-- Empty state -->
+    <div id="emptyState" class="empty" hidden>
+      <p>Nothing on the board matches that.</p>
+      <button id="clearFilters" class="pill-btn">Clear filters</button>
+    </div>
+
+    <footer class="board__footer">
+      <p>Data served by the Filipino Cookbook API, built by <strong>Rillera</strong> ·
+        <a href="https://github.com/exilleon/filipino-cookbook-api-rillera" target="_blank" rel="noopener">source repo ↗</a>
+      </p>
+    </footer>
+  </div>
+
+  <!-- Add Dish modal -->
+  <div id="addDishModal" class="drawer" hidden>
+    <div class="drawer__panel">
+      <button id="addDishClose" class="drawer__close" aria-label="Close">✕</button>
+      <div class="drawer__origin">POST /api/foods</div>
+      <div class="drawer__name" style="font-size:22px;">Add a new dish</div>
+
+      <form id="addDishForm" class="add-form">
+        <label>Dish name
+          <input type="text" id="fName" required placeholder="e.g. Sinigang na Baboy" />
+        </label>
+
+        <label>Category
+          <select id="fCategory" required></select>
+        </label>
+
+        <label>Origin
+          <select id="fOrigin" required></select>
+        </label>
+
+        <label>Instructions
+          <textarea id="fInstructions" required rows="3" placeholder="Short cooking instructions"></textarea>
+        </label>
+
+        <label>Ingredients <span class="hint">(comma-separated, matched to existing ingredient names)</span>
+          <input type="text" id="fIngredients" placeholder="e.g. pork, tamarind, kangkong" />
+        </label>
+
+        <button type="submit" class="pill-btn pill-btn--accent" style="width:100%;margin-top:6px;">Submit to API</button>
+        <p id="addDishStatus" class="form-status"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Detail drawer -->
+  <div id="drawer" class="drawer" hidden>
+    <div class="drawer__panel">
+      <button id="drawerClose" class="drawer__close" aria-label="Close">✕</button>
+      <div id="drawerBody" class="drawer__body"></div>
+    </div>
+  </div>
+
+<script src="app.js"></script>
+</body>
+</html>
