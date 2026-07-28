@@ -142,7 +142,7 @@ API rejects unauthenticated writes the same way it does reads.
 
 This client application uses the **Filipino Cookbook API** developed by:
 
-**Developer:** Stradlin Rillera
+**Developer:** Stradlin Rillera           
 **GitHub Repository:** https://github.com/exilleon/filipino-cookbook-api-rillera
 
 The API is used for educational purposes with the permission of the developer,
