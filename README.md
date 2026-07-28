@@ -102,7 +102,7 @@ On success (`201`), the board refreshes automatically. On failure (e.g. missing
 required field, giving a `400`), the exact error message returned by the API is
 shown inline in the form.
 
-**Delete a dish** — open any dish's detail drawer and click ** Delete this
+**Delete a dish** — open any dish's detail drawer and click **Delete this
 dish**. This asks for confirmation, then calls `DELETE /api/foods/{id}`. On
 success (`200`) the drawer closes and the board refreshes; on failure (e.g.
 `404` if it was already deleted elsewhere) the error is shown inline.
