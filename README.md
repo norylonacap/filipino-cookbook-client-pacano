@@ -15,8 +15,7 @@ the live API.
 4. [API Endpoints Used](#api-endpoints-used)
 5. [Feature: Add & Delete Dishes](#feature-add--delete-dishes)
 6. [Screenshots](#screenshots)
-7. [Known Issues](#known-issues)
-8. [API Source and Acknowledgment](#api-source-and-acknowledgment)
+7. [API Source and Acknowledgment](#api-source-and-acknowledgment)
 
 ---
 
@@ -126,17 +125,6 @@ API rejects unauthenticated writes the same way it does reads.
 ![Delete](images/6.png)
 - Connection error state (e.g. wrong token)
 ![Error](images/7.png)
-
-## Known Issues
-
-- The current version of the upstream API (`filipino-cookbook-api-rillera`)
-  registers a duplicate catch-all `OPTIONS` route in `public/index.php`
-  (once near the CORS setup, once again near the bottom of the file), which
-  causes a `FastRoute\BadRouteException` and crashes the entire app before
-  it can respond to anything. This is not a bug in this client — it was
-  reported to the API's developer. A local workaround (removing the second
-  duplicate route registration) was used to test this client while waiting
-  on the fix.
 
 ## API Source and Acknowledgment
 
